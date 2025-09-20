@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerCompass - Your Personalized Career & Education Advisor</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <h2>CareerCompass</h2>
+            </div>
+            <div class="navbar-menu">
+                <a href="javascript:void(0)" onclick="showSection('landing')" class="nav-link">Home</a>
+                <a href="javascript:void(0)" onclick="showSection('assessment')" class="nav-link">Assessment</a>
+                <a href="javascript:void(0)" onclick="showSection('colleges')" class="nav-link">Colleges</a>
+                <a href="javascript:void(0)" onclick="showSection('dashboard')" class="nav-link">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Landing Page -->
+    <section id="landing" class="section active">
+        <div class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Find Your Perfect Career Path</h1>
+                    <p class="hero-subtitle">Discover your ideal career through AI-powered assessment, explore educational pathways, and find the right colleges - all in one place.</p>
+                    <div class="hero-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">🎯</div>
+                            <h3>Personalized Assessment</h3>
+                            <p>Comprehensive evaluation of your interests, personality, and aptitude</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🎓</div>
+                            <h3>Career Recommendations</h3>
+                            <p>AI-powered career suggestions with detailed pathways and requirements</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🏫</div>
+                            <h3>College Directory</h3>
+                            <p>Comprehensive database of government colleges with detailed information</p>
+                        </div>
+                    </div>
+                    <button class="btn btn--primary btn--lg" onclick="startAssessment()">Start Your Career Assessment</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Assessment Section -->
+    <section id="assessment" class="section">
+        <div class="container">
+            <div class="assessment-container">
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                    <div class="progress-text" id="progressText">Step 1 of 5</div>
+                </div>
+
+                <!-- Step 1: Basic Info -->
+                <div class="assessment-step active" id="step1">
+                    <h2>Basic Information</h2>
+                    <p>Tell us a bit about yourself to get started.</p>
+                    <form class="assessment-form">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="userName" placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Current Class</label>
+                            <select class="form-control" id="userClass">
+                                <option value="">Select your class</option>
+                                <option value="10">Class 10</option>
+                                <option value="11">Class 11</option>
+                                <option value="12">Class 12</option>
+                                <option value="graduate">Graduate</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">State</label>
+                            <select class="form-control" id="userState">
+                                <option value="">Select your state</option>
+                                <option value="delhi">Delhi</option>
+                                <option value="maharashtra">Maharashtra</option>
+                                <option value="west-bengal">West Bengal</option>
+                                <option value="tamil-nadu">Tamil Nadu</option>
+                                <option value="rajasthan">Rajasthan</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Gender</label>
+                            <select class="form-control" id="userGender">
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Step 2: Interest Assessment -->
+                <div class="assessment-step" id="step2">
+                    <h2>Interest Assessment</h2>
+                    <p>Help us understand what subjects and activities you enjoy most.</p>
+                    <div id="interestQuestions"></div>
+                </div>
+
+                <!-- Step 3: Personality Assessment -->
+                <div class="assessment-step" id="step3">
+                    <h2>Personality Assessment</h2>
+                    <p>Let's explore your working style and preferences.</p>
+                    <div id="personalityQuestions"></div>
+                </div>
+
+                <!-- Step 4: Aptitude Test -->
+                <div class="assessment-step" id="step4">
+                    <h2>Aptitude Assessment</h2>
+                    <p>Test your logical and analytical thinking abilities.</p>
+                    <div id="aptitudeQuestions"></div>
+                </div>
+
+                <!-- Step 5: Values & Preferences -->
+                <div class="assessment-step" id="step5">
+                    <h2>Values & Career Preferences</h2>
+                    <p>What matters most to you in your future career?</p>
+                    <div id="valuesQuestions"></div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="assessment-navigation">
+                    <button class="btn btn--outline" id="prevBtn" onclick="previousStep()" style="display: none;">Previous</button>
+                    <button class="btn btn--primary" id="nextBtn" onclick="nextStep()">Next</button>
+                    <button class="btn btn--primary" id="submitBtn" onclick="submitAssessment()" style="display: none;">Get My Results</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="section">
+        <div class="container">
+            <h1>Your Personalized Career Recommendations</h1>
+            <div class="results-container">
+                <!-- User Summary -->
+                <div class="card user-summary">
+                    <div class="card__body">
+                        <h3>Assessment Summary</h3>
+                        <div id="userSummary"></div>
+                    </div>
+                </div>
+
+                <!-- Personality Chart -->
+                <div class="card">
+                    <div class="card__body">
+                        <h3>Your Personality Profile</h3>
+                        <div class="chart-container" style="position: relative; height: 300px;">
+                            <canvas id="personalityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interest Chart -->
+                <div class="card">
+                    <div class="card__body">
+                        <h3>Interest Areas</h3>
+                        <div class="chart-container" style="position: relative; height: 300px;">
+                            <canvas id="interestChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Career Recommendations -->
+                <div class="career-recommendations">
+                    <h2>Top Career Matches for You</h2>
+                    <div id="careerMatches"></div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="results-actions">
+                    <button class="btn btn--primary" onclick="showSection('colleges')">Explore Colleges</button>
+                    <button class="btn btn--outline" onclick="showSection('dashboard')">View Dashboard</button>
+                    <button class="btn btn--outline" onclick="exportResults()">Export Report</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Colleges Section -->
+    <section id="colleges" class="section">
+        <div class="container">
+            <h1>Government College Directory</h1>
+            
+            <!-- Search and Filters -->
+            <div class="college-filters">
+                <div class="search-container">
+                    <input type="text" class="form-control search-input" id="collegeSearch" placeholder="Search colleges by name or location...">
+                </div>
+                <div class="filter-controls">
+                    <select class="form-control" id="stateFilter">
+                        <option value="">All States</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="West Bengal">West Bengal</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                    </select>
+                    <select class="form-control" id="courseFilter">
+                        <option value="">All Courses</option>
+                        <option value="B.Tech">B.Tech</option>
+                        <option value="B.A.">B.A.</option>
+                        <option value="B.Sc.">B.Sc.</option>
+                        <option value="B.Com">B.Com</option>
+                        <option value="MBA">MBA</option>
+                    </select>
+                    <button class="btn btn--outline" onclick="clearFilters()">Clear Filters</button>
+                </div>
+            </div>
+
+            <!-- College Cards -->
+            <div class="college-grid" id="collegeGrid"></div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="section">
+        <div class="container">
+            <h1>Your Career Dashboard</h1>
+            
+            <div class="dashboard-grid">
+                <!-- Profile Summary -->
+                <div class="card profile-card">
+                    <div class="card__body">
+                        <h3>Profile Summary</h3>
+                        <div id="profileSummary">
+                            <p>Complete your career assessment to see your personalized dashboard.</p>
+                            <button class="btn btn--primary" onclick="startAssessment()">Take Assessment</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Saved Colleges -->
+                <div class="card">
+                    <div class="card__body">
+                        <h3>Saved Colleges</h3>
+                        <div id="savedColleges">
+                            <p>No colleges saved yet. Browse colleges to add them to your list.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommended Careers -->
+                <div class="card">
+                    <div class="card__body">
+                        <h3>Your Career Matches</h3>
+                        <div id="dashboardCareers">
+                            <p>Complete your assessment to see career recommendations.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Application Timeline -->
+                <div class="card">
+                    <div class="card__body">
+                        <h3>Important Deadlines</h3>
+                        <div id="deadlines">
+                            <div class="deadline-item">
+                                <div class="deadline-date">June 30, 2025</div>
+                                <div class="deadline-text">Delhi University Applications</div>
+                            </div>
+                            <div class="deadline-item">
+                                <div class="deadline-date">July 15, 2025</div>
+                                <div class="deadline-text">University of Mumbai Applications</div>
+                            </div>
+                            <div class="deadline-item">
+                                <div class="deadline-date">May 15, 2025</div>
+                                <div class="deadline-text">JNU Admissions</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h4>How accurate are the career recommendations?</h4>
+                    <p>Our AI-powered assessment analyzes multiple factors including interests, personality, aptitude, and values to provide highly personalized recommendations.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Can I retake the assessment?</h4>
+                    <p>Yes, you can retake the assessment at any time to update your recommendations as your interests evolve.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Are all colleges listed government institutions?</h4>
+                    <p>Yes, our directory focuses on government and government-aided institutions to provide affordable education options.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 CareerCompass. Empowering students to make informed career decisions.</p>
+        </div>
+    </footer>
+
+    <!-- Load JavaScript -->
+    <script src="app.js"></script>
+    
+    <script>
+    // Add immediate error handling and ensure functions are globally available
+    window.showSection = function(sectionId) {
+        console.log('showSection called with:', sectionId);
+        try {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show target section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                console.log('Successfully showed section:', sectionId);
+                
+                // Special handling for dashboard
+                if (sectionId === 'dashboard' && typeof updateDashboard === 'function') {
+                    updateDashboard();
+                }
+            } else {
+                console.error('Section not found:', sectionId);
+            }
+        } catch (error) {
+            console.error('Error in showSection:', error);
+        }
+    };
+
+    window.startAssessment = function() {
+        console.log('startAssessment called');
+        try {
+            if (typeof window.showSection === 'function') {
+                window.showSection('assessment');
+                // Reset assessment if functions are available
+                if (typeof resetAssessment === 'function') {
+                    resetAssessment();
+                }
+            } else {
+                console.error('showSection function not available');
+            }
+        } catch (error) {
+            console.error('Error in startAssessment:', error);
+        }
+    };
+
+    // Ensure functions are available immediately
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM fully loaded');
+        
+        // Test that key functions are available
+        if (typeof showSection !== 'function') {
+            console.error('showSection function not available after DOM load');
+        }
+        if (typeof startAssessment !== 'function') {
+            console.error('startAssessment function not available after DOM load');
+        }
+    });
+    </script>
+</body>
+</html>
